@@ -5,14 +5,6 @@
 #include <set>
 using namespace std;
 
-#define REP(i,a,b) for(int i=int(a);i<=int(b);i++)
-#define TRvii(c,it)  for(vii::iterator it=(c).begin();it!=(c).end();it++)
-
-typedef pair<int, int>   ii;
-typedef vector<ii>       vii;
-typedef vector<int>      vi;
-typedef set<int>         si;
-
 // Union-Find Disjoint Sets Library written in OOP manner, using both path compression and union by rank heuristics
 class UnionFind {                                              // OOP style
 private:
