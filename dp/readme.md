@@ -13,8 +13,8 @@ DP
                         P = (i1, · · · , is), 1 < i1 < · · · < is, ai1 < ai2 < · · · < ais,
                         求最长的上升子序列的长度是多少?
                         f[i]以i为结尾得最长上升子序列 f(i) = max {f(j)}, 1≤ j< i, (使用树状数组求前缀 max)
-        [最长公共子序列] f(i, j) 表示 a1−i, b1−j 的最长公共子序列. 
-                        f(i, j) = min{
+        [最长公共子序列] f(i, j) 表示 a1−i, b1−j 的最长公共子序列. Longest common subsequence
+                        f(i, j) = max{
                                         f(i − 1, j − 1) , ai = bj
                                         f(i, j − 1)
                                         f(i − 1, j)
