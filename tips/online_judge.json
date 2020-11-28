@@ -9,10 +9,6 @@
     "codeforce":{
         "pwd":""
     },
-    "vjudge":{
-        "email":"chuanyihuang235@gmail.com",
-        "pwd":"_x$9nfmm+#nxBVq"
-    },
     "LibreOJ":{
         "email":"chuanyihuang235@gmail.com",
         "pwd":"_x$9nfmm+#nxBVq"
@@ -33,10 +29,5 @@
     ],
     "uva.onlinejudge.org":[
         "sanyuwen","huang235"
-    ],
-    "https://www.luogu.com.cn/":{
-        "username":"sanyuwen",
-        "pwd":"$Kf4FeA$5MY2V$K",
-        "email":"chuanyihuang235@gmail.com"
-    }
+    ]
 }
