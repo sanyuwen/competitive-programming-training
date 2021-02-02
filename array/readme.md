@@ -67,6 +67,7 @@ def minSubarray(self, A: List[int], p: int) -> int:
     return ans if ans<n else -1
 
 
+# no oer
 def all_indexs(s1: str, s2: str) -> List[int]:
     # return all indexs in s1 for s2
     m, n, i, ans = len(s1), len(s2), 0, []
