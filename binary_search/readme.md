@@ -2,94 +2,53 @@
 
 ### [binary_search.**binary_search**(*lo*, *hi*, *function*)](/binary_search.py)
 
-Find the first index `i` where `lo <= i <= hi` that satisfies `function`.
-
-when returned hi, it means lo <= j < hi not satisfy function
-
-def binary_search(arr, start, end, function):
-    while start < end:
-        mid = start+(end-start>>1)
-        if function(arr, mid):
-            end=mid
-        else:
-            start=mid+1
-    return start
-
-[Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays)
-```python
-# this solution is wrong
-# def findMedianSortedArrays(nums1, nums2):
-
-#     def median(a, b, extrema):
-#         k = -1 * (extrema == max)
-#         half = []
-#         if a:
-#             half += [nums2[j + k]]
-#         if b:
-#             half += [nums1[i + k]]
-#         return extrema(half)
-
-#     nums1, nums2 = sorted([nums1, nums2], key=len)
-#     m, n = len(nums1), len(nums2)
-#     sum_len = m + n
-#     mean_len = (sum_len + 1)//2
-#     i = binary_search(0, m,
-#         lambda x: x and nums1[x - 1] > nums2[mean_len - x]
-#     )
-#     j = sum_len - i
-#     return median_low if sum_len%2 else (median_low
-#         + median(i == m, j == n, min)
-#     )/2
-```
 
 [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array)
 ```python
 def search(self, nums: List[int], target: int) -> int:
         
-        def binary_search2(start, end, function):
-            while start < end:
-                mid = start+(end-start>>1)
-                if function(mid):
-                    end=mid
-                else:
-                    start=mid+1
-            return start
-        
-        def binary_search1(lo, hi, target):
-            while lo<=hi:
-                mid = lo+(hi-lo>>1)
-                if nums[mid]==target:
-                    return mid
-                elif nums[mid]>target:
-                    hi=mid-1
-                else:
-                    lo=mid+1
-            return -1
-
-        if nums:
-            n = len(nums)
-            i = binary_search2(0, n, lambda x: nums[x]<nums[0])
-            if i==n:
-                return binary_search1(0, n-1, target)
+    def binary_search(start, end, function):
+        while start < end:
+            mid = start+(end-start>>1)
+            if function(mid):
+                end=mid
             else:
-                if target<nums[0]:
-                    return binary_search1(i, n-1, target)
-                else:
-                    return binary_search1(0, i-1, target)
-        return -1
+                start=mid+1
+        return start
+
+    n = len(nums)
+    i = binary_search(1, n, lambda x: nums[x]<nums[0])
+    res = None
+    find_target = lambda x:nums[x]>=target
+    if i==n:
+        res = binary_search(0, n, find_target)
+    else:
+        if target<nums[0]:
+            res = binary_search(i, n, find_target)
+        else:
+            res = binary_search(0, i, find_target)
+    return res if res<n else -1
 ```
 
 [Find First and Last Position of Element in Sorted Array](https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array)
 ```python
 def searchRange(self, nums, target):
+
+    def binary_search(start, end, function):
+        while start < end:
+            mid = start+(end-start>>1)
+            if function(mid):
+                end=mid
+            else:
+                start=mid+1
+        return start
     
     if nums:
         n = len(nums)
         i = binary_search(0, n, lambda x: nums[x] >= target)
         if i==n or nums[i]!=target:
             return [-1, -1]
-        j = binary_search(i, n, lambda y: nums[y] > target)
-        #print(j)
+        j = binary_search(i+1, n, lambda y: nums[y] > target)
         return [i, j-1]
     return [-1, -1]
 ```
@@ -99,7 +58,7 @@ def searchRange(self, nums, target):
 ```python
 def search(self, nums: List[int], target: int) -> bool:
         
-        def binary_search2(start, end, function):
+        def binary_search(start, end, function):
             while start < end:
                 mid = start+(end-start>>1)
                 if function(mid):
@@ -108,43 +67,30 @@ def search(self, nums: List[int], target: int) -> bool:
                     start=mid+1
             return start
         
-        def binary_search1(lo, hi, target):
-            while lo<=hi:
-                mid = lo+(hi-lo>>1)
-                if nums[mid]==target:
-                    return True
-                elif nums[mid]>target:
-                    hi=mid-1
-                else:
-                    lo=mid+1
-            return False
-        
-        if nums:
-            n = len(nums)
-            j=n-1
-            while j and nums[j]==nums[0]:
-                j-=1
-            if j==0:
-                return nums[j]==target
+        n = len(nums)
+        j=n-1
+        while j and nums[j]==nums[0]:
+            j-=1
+        if j==0:
+            return nums[j]==target
+        else:
+            j+=1
+            p = binary_search(0, j, lambda x:nums[x]<nums[0])
+            res = 0
+            if target>=nums[0]:
+                res = binary_search(0, p, lambda x:nums[x]>=target)
+                return res < p and nums[res]==target
             else:
-                # rotated
-                j+=1
-                p = binary_search2(0, j, lambda x:nums[x]<nums[0])
-                if p==j:
-                    return binary_search1(0, j-1, target)
-                else:
-                    if target<nums[0]:
-                        return binary_search1(p, j-1, target)
-                    else:
-                        return binary_search1(0, p-1, target)
-        return False
+                res = binary_search(p, j, lambda x:nums[x]>=target)
+                return res < j and nums[res]==target
 ```
 
 [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array)
 ```python
 def findMin(self, nums: List[int]) -> int:
+    # without duplicates
         
-    def binary_search2(start, end, function):
+    def binary_search(start, end, function):
         while start < end:
             mid = start+(end-start>>1)
             if function(mid):
@@ -153,16 +99,49 @@ def findMin(self, nums: List[int]) -> int:
                 start=mid+1
         return start
     
-    if nums[-1]<nums[0]:
-        return nums[binary_search2(0, len(nums), lambda x: nums[x]<nums[0])]
-    return nums[0]
+    n = len(nums)
+    if n==1:
+        return nums[0]
+    if nums[-1]>nums[0]:
+        return nums[0]
+    index = binary_search(0, n, lambda x: nums[x]<nums[0])
+    return nums[index if index<n else 0]    
+```
+
+[Find Minimum in Rotated Sorted Array II](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/)
+```python
+def findMin(self, nums: List[int]) -> int:
+    # with duplicates
+        
+    def binary_search(start, end, function):
+        while start < end:
+            mid = start+(end-start>>1)
+            if function(mid):
+                end=mid
+            else:
+                start=mid+1
+        return start
+    
+    n = len(nums)
+    if n==1:
+        return nums[0]
+    if nums[-1]>nums[0]:
+        return nums[0]
+    j = n-1
+    while j and nums[j]==nums[0]:
+        j-=1
+    if j==0:
+        return nums[0]
+    j+=1
+    index = binary_search(0, j, lambda x: nums[x]<nums[0])
+    return nums[index if index<j else 0]    
 ```
 
 [Find Peak Element](https://leetcode.com/problems/find-peak-element)
 ```python
  def findPeakElement(self, nums: List[int]) -> int:
         
-    def binary_search2(start, end, function):
+    def binary_search(start, end, function):
         while start < end:
             mid = start+(end-start>>1)
             if function(mid):
@@ -171,16 +150,15 @@ def findMin(self, nums: List[int]) -> int:
                 start=mid+1
         return start
     
-    if nums:
-        return binary_search2(0, len(nums)-1, lambda x:nums[x]>nums[x+1])
-    return -1
+    return binary_search(0, len(nums)-1, lambda x:nums[x]>nums[x+1])
+
 ```
 
 [H-Index II](https://leetcode.com/problems/h-index-ii)
 ```python
 def hIndex(self, citations: List[int]) -> int:
         
-    def binary_search2(lo, hi, function):
+    def binary_search(lo, hi, function):
         while lo < hi:
             mid = lo+(hi-lo>>1)
             if function(mid):
@@ -191,7 +169,7 @@ def hIndex(self, citations: List[int]) -> int:
     
     if citations:
         n = len(citations)
-        return n - binary_search2(0, n, lambda x: n-x<=citations[x])
+        return n - binary_search(0, n, lambda x: n-x<=citations[x])
     return 0
 ```
 
@@ -199,21 +177,30 @@ def hIndex(self, citations: List[int]) -> int:
 ```python
 
 #https://cp-algorithms.com/sequences/longest_increasing_subsequence.html
+#https://leetcode.com/problems/longest-increasing-subsequence/
 def lengthOfLIS(self, nums: List[int]) -> int:
         
-        def binary_search2(lo, hi, function):
-            while lo < hi:
+        n = len(nums)
+        arr = [0]*n
+        size = 1
+        arr[0] = nums[0]
+        
+        def binary_search(lo, hi, a):
+            while lo<hi:
                 mid = lo+(hi-lo>>1)
-                if function(mid):
-                    hi=mid
+                if arr[mid]>=a:
+                    hi = mid
                 else:
-                    lo=mid+1
+                    lo = mid+1
             return lo
-
-        tails, size = [0]*len(nums), 0
-        for num in nums:
-            i = binary_search2(0, size, lambda x: tails[x] >= num)
-            tails[i], size = num, max(i + 1, size)
+        
+        for a in nums[1:]:
+            # every iteration, 
+            # the current element would be correct position of the LIS ending at it
+            i = binary_search(0, size, a)
+            arr[i] = a
+            if i == size:
+                size+=1
         return size
 ```
 
@@ -223,7 +210,7 @@ def isPerfectSquare(self, num: int) -> bool:
     if num==1: 
         return num
     
-    def binary_search2(lo, hi, function):
+    def binary_search(lo, hi, function):
         while lo < hi:
             mid = lo+(hi-lo>>1)
             if function(mid):
@@ -231,7 +218,7 @@ def isPerfectSquare(self, num: int) -> bool:
             else:
                 lo=mid+1
         return lo
-    return binary_search2(2, num>>1, lambda x: x**2 >= num)**2 == num
+    return binary_search(2, num>>1, lambda x: x**2 >= num)**2 == num
 ```
 
 [Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum)
@@ -245,7 +232,7 @@ def splitArray(self, nums: List[int], m: int) -> int:
             lower = max(total//m, max(nums))
         
         
-        def binary_search2(lo, hi, function):
+        def binary_search(lo, hi, function):
             while lo < hi:
                 mid = lo+(hi-lo>>1)
                 if function(mid):
@@ -268,7 +255,7 @@ def splitArray(self, nums: List[int], m: int) -> int:
             return True
                 
         
-        return binary_search2(lower, total, possible)
+        return binary_search(lower, total, possible)
 ```
 
 [Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas)
