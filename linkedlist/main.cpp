@@ -41,8 +41,12 @@ void tranverse(){
 int main(){
     append(1);
     set_value(1, 1);
+    tranverse();
+
     append(2);
     set_value(2, 3);
+    tranverse();
+    
     insert_node(2, 3);
     set_value(3, 5);
     tranverse();
